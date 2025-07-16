@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "sales-semo"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "d8d15d3f-51e5-475f-9f50-56dc28db4fcf"
+  }
+}

@@ -1,0 +1,52 @@
+table sales_cockpit
+	lineageTag: b1e92f49-a265-4489-b740-df8157f206e4
+
+	column 'Opportunity ID'
+		dataType: string
+		lineageTag: b37d19b1-b78c-47a7-9dcc-166f3f9095a3
+		summarizeBy: none
+		sourceColumn: Opportunity ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Sales Rep'
+		dataType: string
+		lineageTag: 2272bd20-9b29-4c6c-b096-48edb496740c
+		summarizeBy: none
+		sourceColumn: Sales Rep
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Deal Value (€)'
+		dataType: decimal
+		formatString: "€"\ #,0.###############;-"€"\ #,0.###############;"€"\ #,0.###############
+		lineageTag: aaec97ce-3078-4888-bf15-8348a0999437
+		summarizeBy: sum
+		sourceColumn: Deal Value (€)
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-AT"}
+
+	column Stage
+		dataType: string
+		lineageTag: 17b436a7-6bd8-4167-bcef-95548004fe72
+		summarizeBy: none
+		sourceColumn: Stage
+
+		annotation SummarizationSetBy = Automatic
+
+	partition sales_cockpit = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("C:\Users\lukas.lehnert\Downloads\sales_cockpit.csv"),[Delimiter=",", Columns=4, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Opportunity ID", type text}, {"Sales Rep", type text}, {"Deal Value (€)", Currency.Type}, {"Stage", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
